@@ -4,22 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>BigCat的个人博客</title>
+    <title>Solr学习第02章：快速上手-创建索引 | BigCat的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="BigCat">
     
 
     
-    <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="BigCat的个人博客">
-<meta property="og:url" content="http://kkop233.github.io/index.html">
+    <meta name="description" content="快速上手旨在最快速的建立一个可用的Demo工程，对solr的整个使用过程做一个概况的了解，忽略详细难以理解的超多配置，对进一步的学习起到构建大致框架的作用。
+一、Core的建立在Solr中，一个core就可以简单的类比为关系数据库中的表，一个core可以对应web开发中的java bean，例如，我们可以建立一个“学生”core：
+1. 手动建立core目录和配置文件打开{solrhome}，以s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Solr学习第02章：快速上手-创建索引">
+<meta property="og:url" content="http://kkop233.github.io/solr/cigbslluw000er4nwpfk42qfa.html">
 <meta property="og:site_name" content="BigCat的个人博客">
-<meta property="og:description">
+<meta property="og:description" content="快速上手旨在最快速的建立一个可用的Demo工程，对solr的整个使用过程做一个概况的了解，忽略详细难以理解的超多配置，对进一步的学习起到构建大致框架的作用。
+一、Core的建立在Solr中，一个core就可以简单的类比为关系数据库中的表，一个core可以对应web开发中的java bean，例如，我们可以建立一个“学生”core：
+1. 手动建立core目录和配置文件打开{solrhome}，以s">
+<meta property="og:updated_time" content="2015-10-29T05:21:32.168Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="BigCat的个人博客">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Solr学习第02章：快速上手-创建索引">
+<meta name="twitter:description" content="快速上手旨在最快速的建立一个可用的Demo工程，对solr的整个使用过程做一个概况的了解，忽略详细难以理解的超多配置，对进一步的学习起到构建大致框架的作用。
+一、Core的建立在Solr中，一个core就可以简单的类比为关系数据库中的表，一个core可以对应web开发中的java bean，例如，我们可以建立一个“学生”core：
+1. 手动建立core目录和配置文件打开{solrhome}，以s">
 
     
     <link rel="alternative" href="/atom.xml" title="BigCat的个人博客" type="application/atom+xml">
@@ -77,80 +84,10 @@
 </div>
     </header>
     <div id="container">
-      <div id="main">
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/solr/cigbsllug000ar4nwkhnb6tvw.html" title="Solr学习第03章：快速上手-客户端" itemprop="url">Solr学习第03章：快速上手-客户端</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="BigCat" target="_blank" itemprop="author">BigCat</a>
-		
-  <p class="article-time">
-    <time datetime="2015-10-29T03:23:30.000Z" itemprop="datePublished"> 发表于 2015-10-29</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="SolrJ使用">SolrJ使用</h1><p>上一章我们配置了索引，导入了数据，并且实现了再solr的管理页面搜索数据。但是我们现在面临一个问题，虽然可以用http的方式与solr交互了，但非常的不方便。请求必须自己拼凑字符串，response也必须自己手动处理长长的json字符串，成功失败的状态也必须自己解析等等。<br>好在Solr的开发者已经帮助我们开发好了各种语言使用的客户端，这个客户端可以类比为连接MySQL的JDBC。<br>我们先建立个简单的Java项目，拷贝<code>solr-5.3.1\dist</code>目录下的<code>solr-solrj-5.3.1.jar</code>，以及<code>solr-5.3.1\dist\solrj-lib</code>下的所有jar引入工程，可能还缺少一个commons-logging.jar，百度下载即可。<br>jar包导入后编写代码：<br>Student.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> solrj;</span><br><span class="line"><span class="comment">//省略import</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> Date birthday;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> avg_score;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; hobby;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> String motto;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(<span class="keyword">int</span> id, String name, Date birthday, <span class="keyword">double</span> avg_score,</span><br><span class="line">            List&lt;String&gt; hobby)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.birthday = birthday;</span><br><span class="line">        <span class="keyword">this</span>.avg_score = avg_score;</span><br><span class="line">        <span class="keyword">this</span>.hobby = hobby;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Student [id="</span> + id + <span class="string">", name="</span> + name + <span class="string">", birthday="</span></span><br><span class="line">                + birthday + <span class="string">", avg_score="</span> + avg_score + <span class="string">", hobby="</span> + hobby</span><br><span class="line">                + <span class="string">", motto="</span> + motto + <span class="string">"]"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">      <span class="comment">// 省略get set方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>注意Student中的field必须用@Field注解<br>Main.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> solrj;</span><br><span class="line"><span class="comment">//省略import</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> String url=<span class="string">"http://host:port/solr/student"</span>;   <span class="comment">//注意改成你的地址</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span> <span class="keyword">throws</span> SolrServerException, IOException </span>&#123;</span><br><span class="line">        List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">        list.add(<span class="string">"暴走"</span>);</span><br><span class="line">        list.add(<span class="string">"漫画"</span>);</span><br><span class="line">        list.add(<span class="string">"篮球"</span>);</span><br><span class="line">        SolrInputDocument doc=<span class="keyword">new</span> SolrInputDocument();</span><br><span class="line">        doc.setField(<span class="string">"id"</span>, <span class="number">666</span>);</span><br><span class="line">        doc.setField(<span class="string">"name"</span>, <span class="string">"王尼玛"</span>);</span><br><span class="line">        doc.setField(<span class="string">"birthday"</span>, <span class="keyword">new</span> Date());</span><br><span class="line">        doc.setField(<span class="string">"avg_score"</span>, <span class="number">9.9</span>);</span><br><span class="line">        doc.setField(<span class="string">"hobby"</span>, list); <span class="comment">// list可以是继承Collection的对象</span></span><br><span class="line">        doc.setField(<span class="string">"motto"</span>, <span class="string">"fxxk my life"</span>);</span><br><span class="line">        </span><br><span class="line">        SolrClient server = <span class="keyword">new</span>    HttpSolrClient(url);</span><br><span class="line">        UpdateResponse response=server.add(doc);</span><br><span class="line">        server.commit();</span><br><span class="line">        server.close();</span><br><span class="line">        System.out.println(response.toString());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">search</span><span class="params">()</span> <span class="keyword">throws</span> SolrServerException, IOException </span>&#123;</span><br><span class="line">        SolrClient server = <span class="keyword">new</span>    HttpSolrClient(url);</span><br><span class="line">        SolrQuery query=<span class="keyword">new</span> SolrQuery();</span><br><span class="line">        query.set(<span class="string">"q"</span>, <span class="string">"hobby:篮球 AND id:[2 TO *]"</span>);</span><br><span class="line">        QueryResponse response=server.query(query);</span><br><span class="line">        List&lt;Student&gt; list=response.getBeans(Student.class);</span><br><span class="line">        server.close();</span><br><span class="line">        <span class="keyword">for</span> (Student student : list) &#123;</span><br><span class="line">            System.out.println(student.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> SolrServerException, IOException </span>&#123;</span><br><span class="line">        add();</span><br><span class="line">        search();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>注意事项：</p>
-<ul>
-<li>add是用solrj工具添加了一条记录，search是搜索hobby含有篮球并且id大于2的对象</li>
-<li>SolrClient 对象在使用完后需要关闭，在实际使用中，一个SolrClient对象可以被多线程复用</li>
-<li>Java bean里面需要存储的字段注意使用注解标注</li>
-</ul>
-<p>运行结果：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;responseHeader=&#123;status=<span class="number">0</span>,QTime=<span class="number">58</span>&#125;&#125;</span><br><span class="line">Student [id=<span class="number">3</span>, name=李明, birthday=Tue Jan <span class="number">01</span> <span class="number">08</span>:<span class="number">00</span>:<span class="number">00</span> CST <span class="number">1991</span>, avg_score=<span class="number">111.0</span>, hobby=[篮球, 看电影, 夜跑], motto=null]</span><br><span class="line">Student [id=<span class="number">666</span>, name=王尼玛, birthday=Thu Oct <span class="number">29</span> <span class="number">11</span>:<span class="number">32</span>:<span class="number">22</span> CST <span class="number">2015</span>, avg_score=<span class="number">9.9</span>, hobby=[暴走, 漫画, 篮球], motto=fxxk my life]</span><br></pre></td></tr></table></figure></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/solr/">solr</a>
-</div>
-
-
-  <div class="article-tags">
+      <div id="main" class="post" itemscope itemprop="blogPost">
   
-  <span></span> <a href="/tags/solr/">solr</a><a href="/tags/搜索/">搜索</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
   <h1 itemprop="name">
     
       <a href="/solr/cigbslluw000er4nwpfk42qfa.html" title="Solr学习第02章：快速上手-创建索引" itemprop="url">Solr学习第02章：快速上手-创建索引</a>
@@ -164,9 +101,16 @@
     
   </p>
 </header>
-    <div class="article-content">
-        
-        <p>快速上手旨在最快速的建立一个可用的Demo工程，对solr的整个使用过程做一个概况的了解，忽略详细难以理解的超多配置，对进一步的学习起到构建大致框架的作用。</p>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、Core的建立"><span class="toc-number">1.</span> <span class="toc-text">一、Core的建立</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-_手动建立core目录和配置文件"><span class="toc-number">1.1.</span> <span class="toc-text">1. 手动建立core目录和配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_在管理页面建立core"><span class="toc-number">1.2.</span> <span class="toc-text">2. 在管理页面建立core</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、数据导入"><span class="toc-number">2.</span> <span class="toc-text">二、数据导入</span></a></li></ol>
+		
+		</div>
+		
+		<p>快速上手旨在最快速的建立一个可用的Demo工程，对solr的整个使用过程做一个概况的了解，忽略详细难以理解的超多配置，对进一步的学习起到构建大致框架的作用。</p>
 <h1 id="一、Core的建立">一、Core的建立</h1><p>在Solr中，一个core就可以简单的类比为关系数据库中的表，一个core可以对应web开发中的java bean，例如，我们可以建立一个“学生”core：</p>
 <h2 id="1-_手动建立core目录和配置文件">1. 手动建立core目录和配置文件</h2><p>打开{solrhome}，以<code>student</code> core 为例</p>
 <pre><code>+ 建立<span class="escape">`s</span>tudent/conf<span class="escape">`文</span>件夹
@@ -189,14 +133,9 @@
 <p>如果在建立core的时候发生错误，管理页面会一直有个错误提示去不掉，你可以完全删除core文件夹，重启solr再重复建core操作，即可解决。</p>
 <h1 id="二、数据导入">二、数据导入</h1><p>使用upload方法导入一批数据。打开管理页面 core-selector-&gt;student-&gt;Documents，选择json方式分别导入了以下三条数据：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  "<span class="attribute">id</span>": <span class="value"><span class="number">1</span></span>,</span><br><span class="line">  "<span class="attribute">name</span>": <span class="value"><span class="string">"James"</span></span>,</span><br><span class="line">  "<span class="attribute">birthday</span>": <span class="value"><span class="string">"1991-01-01T00:00:00Z"</span></span>,</span><br><span class="line">  "<span class="attribute">avg_score</span>": <span class="value"><span class="number">111</span></span>,</span><br><span class="line">  "<span class="attribute">hobby</span>": <span class="value">[</span><br><span class="line">    <span class="string">"篮球"</span></span><br><span class="line">  ]</span>,</span><br><span class="line">  "<span class="attribute">motto</span>": <span class="value"><span class="string">"业精于勤,荒于嬉.行成于思,毁于随"</span></span><br><span class="line"></span>&#125;</span><br><span class="line">&#123;</span><br><span class="line">  "<span class="attribute">id</span>": <span class="value"><span class="number">2</span></span>,</span><br><span class="line">  "<span class="attribute">name</span>": <span class="value"><span class="string">"小王"</span></span>,</span><br><span class="line">  "<span class="attribute">birthday</span>": <span class="value"><span class="string">"1991-01-01T00:00:00Z"</span></span>,</span><br><span class="line">  "<span class="attribute">avg_score</span>": <span class="value"><span class="number">111</span></span>,</span><br><span class="line">  "<span class="attribute">hobby</span>": <span class="value">[</span><br><span class="line">    <span class="string">"唱K"</span></span><br><span class="line">  ]</span>,</span><br><span class="line">  "<span class="attribute">motto</span>": <span class="value"><span class="string">"To be, or not to be: that is the question"</span></span><br><span class="line"></span>&#125;</span><br><span class="line">&#123;</span><br><span class="line">  "<span class="attribute">id</span>": <span class="value"><span class="number">3</span></span>,</span><br><span class="line">  "<span class="attribute">name</span>": <span class="value"><span class="string">"李明"</span></span>,</span><br><span class="line">  "<span class="attribute">birthday</span>": <span class="value"><span class="string">"1991-01-01T00:00:00Z"</span></span>,</span><br><span class="line">  "<span class="attribute">avg_score</span>": <span class="value"><span class="number">111</span></span>,</span><br><span class="line">  "<span class="attribute">hobby</span>": <span class="value">[</span><br><span class="line">    <span class="string">"篮球"</span>,</span><br><span class="line">    <span class="string">"看电影"</span>,</span><br><span class="line">    <span class="string">"夜跑"</span></span><br><span class="line">  ]</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure></p>
 <p>这样一来，索引就算是创建好了，而且我们也导入了需要搜索的数据，打开Query界面，可以在这里进行简单的查询，看看我们刚刚导入的数据如何。<br>修改”q”字段为 <code>hobby:篮球</code>，点击查询，可以看到id=1,3的doc被查询了出来，说明我们导入的数据已经被成功索引了。注意，solr还帮我们在数据上方生成了这一次索引的请求url，<a href="http://182.92.158.145:8983/solr/student/select?q=hobby%3A%E7%AF%AE%E7%90%83&amp;wt=json&amp;indent=true" target="_blank" rel="external">http://182.92.158.145:8983/solr/student/select?q=hobby%3A%E7%AF%AE%E7%90%83&amp;wt=json&amp;indent=true</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
+  
+	</div>
+		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
@@ -214,105 +153,51 @@
 
 
 
-
-<div class="comments-count">
+	<div class="article-share" id="share">
 	
-</div>
+	  <div data-url="http://kkop233.github.io/solr/cigbslluw000er4nwpfk42qfa.html" data-title="Solr学习第02章：快速上手-创建索引 | BigCat的个人博客" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
 
 </footer>
 
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/solr/cigbsllrf0000r4nwj52rg7ug.html" title="Solr学习第01章：安装与配置" itemprop="url">Solr学习第01章：安装与配置</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="BigCat" target="_blank" itemprop="author">BigCat</a>
-		
-  <p class="article-time">
-    <time datetime="2015-10-28T02:01:31.000Z" itemprop="datePublished"> 发表于 2015-10-28</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h1 id="一、Solr简介">一、Solr简介</h1><p>Apache Solr官网</p>
-<blockquote>
-<p>Solr is highly reliable, scalable and fault tolerant, providing distributed indexing,<br>replication and load-balanced querying, automated failover and recovery, centralized configuration and more.<br>Solr powers the search and navigation features of many of the world’s largest internet sites. –Apache Solr官网<br>百度百科<br>Solr是一个高性能，采用Java5开发，基于Lucene的全文搜索服务器。同时对其进行了扩展，提供了比Lucene更为丰富的查询语言，<br>同时实现了可配置、可扩展并对查询性能进行了优化，并且提供了一个完善的功能管理界面，是一款非常优秀的全文搜索引擎。–百度百科</p>
-</blockquote>
-<p>总而言之，Solr是一个开源的基于java的搜索解决方案，如果你想部署自己的搜索服务，不想受制于第三方搜索服务的限制，那么选择Solr吧，它一定不会让你失望</p>
-<h1 id="二、Solr的安装">二、Solr的安装</h1><h2 id="官方下载地址">官方下载地址</h2><p>下载地址 <code>http://lucene.apache.org/solr/mirrors-solr-latest-redir.html</code></p>
-<h2 id="CentOS_7_下solr的安装部署">CentOS 7 下solr的安装部署</h2><p>Solr版本 <code>5.7.1</code><br>Solr在5.0版本之后取消了对于web容器的依赖，或者说，内置了Jetty容器而不是以war包的形式发布。5.0版本后的部署非常简单，达到了开箱即用的效果。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd /opt</span><br><span class="line">wget http:<span class="comment">//mirror.bit.edu.cn/apache/lucene/solr/5.3.1/solr-5.3.1.tgz</span></span><br><span class="line">tar zxvf solr-<span class="number">5.3</span><span class="number">.1</span>.tgz -C /opt</span><br><span class="line">cd /opt/solr-<span class="number">5.3</span><span class="number">.1</span>/bin</span><br><span class="line">./solr start <span class="preprocessor">#启动</span></span><br><span class="line">./solr stop <span class="preprocessor">#停止</span></span><br><span class="line">./solr restart -p <span class="number">8983</span> <span class="preprocessor">#重启<span class="number">8983</span>端口的solr</span></span><br><span class="line">./solr start -help <span class="preprocessor">#详细帮助，可以切换端口，重设solrhome等</span></span><br></pre></td></tr></table></figure></p>
-<p>启动后，会看到<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Waiting up <span class="keyword">to</span> <span class="number">30</span> seconds <span class="keyword">to</span> see Solr <span class="property">running</span> <span class="function_start"><span class="keyword">on</span></span> port <span class="number">8983</span> [/]  </span><br><span class="line">Started Solr server <span class="function_start"><span class="keyword">on</span></span> port <span class="number">8983</span> (pid=<span class="number">1248</span>). Happy searching!</span><br></pre></td></tr></table></figure></p>
-<p>这时候访问 host:port/solr/（本地默认为<a href="http://localhost:8983/solr/" target="_blank" rel="external">http://localhost:8983/solr/</a> ） 如果看到solr的网页管理页面，大功告成！是不是很easy？</p>
-<p>管理页面左侧有几个标签：</p>
-<ul>
-<li>Dashboard 可以看的solr的基本信息、配置、内存使用等</li>
-<li>Logging 网页版的日志输出，如果你在使用时遇到错误，可以在这里看到详细的报错信息</li>
-<li>Core Admin 管理你的Core，比如你更新了Core的配置，不用重启solr实例，在这里refresh一下就好</li>
-<li>Java Properties jvm的参数信息</li>
-<li>Thread Dunp 所有的线程信息</li>
-<li>Core Selector 选择一个Core，查看配置，进行自定义的查询等等</li>
-</ul>
-<h1 id="配置solrhome">配置solrhome</h1><p>如果保持默认设置，你的<code>{solrhome}</code>位于<code>{solr安装位置}/server/solr</code>，这个目录很重要，你的索引配置，搜索配置，数据等文件都位于这个目录下，我们接下来的工作，主要就在这个目录进行。为了方便，我们现在改变solrhome的位置，其实很简单，在启动solr的时候加入参数<code>-s &lt;dir&gt;</code>即可<br>在此之前，先在<code>/opt</code>下建立<code>mysolrhome</code>文件夹，而且<code>{solrhome}</code>要求必须含有一个<code>solr.xml</code>文件，我们直接从默认目录拷贝过来<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">solr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">solrcloud</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"host"</span>&gt;</span>$&#123;host:&#125;<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"hostPort"</span>&gt;</span>$&#123;jetty.port:8983&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"hostContext"</span>&gt;</span>$&#123;hostContext:solr&#125;<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">bool</span> <span class="attribute">name</span>=<span class="value">"genericCoreNodeNames"</span>&gt;</span>$&#123;genericCoreNodeNames:true&#125;<span class="tag">&lt;/<span class="title">bool</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"zkClientTimeout"</span>&gt;</span>$&#123;zkClientTimeout:30000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"distribUpdateSoTimeout"</span>&gt;</span>$&#123;distribUpdateSoTimeout:600000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"distribUpdateConnTimeout"</span>&gt;</span>$&#123;distribUpdateConnTimeout:60000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">solrcloud</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">shardHandlerFactory</span> <span class="attribute">name</span>=<span class="value">"shardHandlerFactory"</span></span><br><span class="line">    <span class="attribute">class</span>=<span class="value">"HttpShardHandlerFactory"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"socketTimeout"</span>&gt;</span>$&#123;socketTimeout:600000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"connTimeout"</span>&gt;</span>$&#123;connTimeout:60000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">shardHandlerFactory</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">solr</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>然后在bin目录输入<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./solr <span class="operator"><span class="keyword">stop</span> -<span class="keyword">p</span> <span class="number">8983</span> #停止时要用-<span class="keyword">p</span>指明停止的是哪个端口的solr</span><br><span class="line">./solr <span class="keyword">start</span> -s /opt/mysolrhome</span></span><br></pre></td></tr></table></figure></p>
-<p>打开管理页面，看到运行信息中<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dsolr<span class="class">.solr</span><span class="class">.home</span>=/opt/mysolrhome</span><br></pre></td></tr></table></figure></p>
-<p>就说明成功了</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/solr/">solr</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/solr/">solr</a><a href="/tags/搜索/">搜索</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
+   	       
+	</article>
 	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/solr/cigbsllug000ar4nwkhnb6tvw.html" title="Solr学习第03章：快速上手-客户端">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Solr学习第03章：快速上手-客户端</span>
+</a>
 </div>
 
-</footer>
 
-
-    </article>
-
-
-
-
-
-
-
+<div class="next">
+<a href="/solr/cigbsllrf0000r4nwj52rg7ug.html"  title="Solr学习第01章：安装与配置">
+ <strong>下一篇：</strong><br/> 
+ <span>Solr学习第01章：安装与配置
+</span>
+</a>
 </div>
+
+</nav>
+
+	
+
+</div>  
       <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、Core的建立"><span class="toc-number">1.</span> <span class="toc-text">一、Core的建立</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-_手动建立core目录和配置文件"><span class="toc-number">1.1.</span> <span class="toc-text">1. 手动建立core目录和配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_在管理页面建立core"><span class="toc-number">1.2.</span> <span class="toc-text">2. 在管理页面建立core</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、数据导入"><span class="toc-number">2.</span> <span class="toc-text">二、数据导入</span></a></li></ol>
+ 
+  </div>
 
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
@@ -452,12 +337,89 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
         
     }
   });
 });
 </script>
 
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
 
 
 
@@ -523,4 +485,4 @@ document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3
 <!-- Tiny_search End -->
 
   </body>
- </html>
+</html>

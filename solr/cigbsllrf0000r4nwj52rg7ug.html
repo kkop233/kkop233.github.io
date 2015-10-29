@@ -1,0 +1,479 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Solr学习第01章：安装与配置 | BigCat的个人博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="BigCat">
+    
+
+    
+    <meta name="description" content="一、Solr简介Apache Solr官网
+
+Solr is highly reliable, scalable and fault tolerant, providing distributed indexing,replication and load-balanced querying, automated failover and recovery, centralized configu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Solr学习第01章：安装与配置">
+<meta property="og:url" content="http://kkop233.github.io/solr/cigbsllrf0000r4nwj52rg7ug.html">
+<meta property="og:site_name" content="BigCat的个人博客">
+<meta property="og:description" content="一、Solr简介Apache Solr官网
+
+Solr is highly reliable, scalable and fault tolerant, providing distributed indexing,replication and load-balanced querying, automated failover and recovery, centralized configu">
+<meta property="og:updated_time" content="2015-10-29T05:21:39.532Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Solr学习第01章：安装与配置">
+<meta name="twitter:description" content="一、Solr简介Apache Solr官网
+
+Solr is highly reliable, scalable and fault tolerant, providing distributed indexing,replication and load-balanced querying, automated failover and recovery, centralized configu">
+
+    
+    <link rel="alternative" href="/atom.xml" title="BigCat的个人博客" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="BigCat的个人博客" title="BigCat的个人博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="BigCat的个人博客">BigCat的个人博客</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+						<li><a href="/categories">Categories</a></li>
+					
+						<li><a href="/tags">Tags</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kkop233.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/solr/cigbsllrf0000r4nwj52rg7ug.html" title="Solr学习第01章：安装与配置" itemprop="url">Solr学习第01章：安装与配置</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="BigCat" target="_blank" itemprop="author">BigCat</a>
+		
+  <p class="article-time">
+    <time datetime="2015-10-28T02:01:31.000Z" itemprop="datePublished"> 发表于 2015-10-28</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、Solr简介"><span class="toc-number">1.</span> <span class="toc-text">一、Solr简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、Solr的安装"><span class="toc-number">2.</span> <span class="toc-text">二、Solr的安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#官方下载地址"><span class="toc-number">2.1.</span> <span class="toc-text">官方下载地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CentOS_7_下solr的安装部署"><span class="toc-number">2.2.</span> <span class="toc-text">CentOS 7 下solr的安装部署</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置solrhome"><span class="toc-number">3.</span> <span class="toc-text">配置solrhome</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="一、Solr简介">一、Solr简介</h1><p>Apache Solr官网</p>
+<blockquote>
+<p>Solr is highly reliable, scalable and fault tolerant, providing distributed indexing,<br>replication and load-balanced querying, automated failover and recovery, centralized configuration and more.<br>Solr powers the search and navigation features of many of the world’s largest internet sites. –Apache Solr官网<br>百度百科<br>Solr是一个高性能，采用Java5开发，基于Lucene的全文搜索服务器。同时对其进行了扩展，提供了比Lucene更为丰富的查询语言，<br>同时实现了可配置、可扩展并对查询性能进行了优化，并且提供了一个完善的功能管理界面，是一款非常优秀的全文搜索引擎。–百度百科</p>
+</blockquote>
+<p>总而言之，Solr是一个开源的基于java的搜索解决方案，如果你想部署自己的搜索服务，不想受制于第三方搜索服务的限制，那么选择Solr吧，它一定不会让你失望</p>
+<h1 id="二、Solr的安装">二、Solr的安装</h1><h2 id="官方下载地址">官方下载地址</h2><p>下载地址 <code>http://lucene.apache.org/solr/mirrors-solr-latest-redir.html</code></p>
+<h2 id="CentOS_7_下solr的安装部署">CentOS 7 下solr的安装部署</h2><p>Solr版本 <code>5.7.1</code><br>Solr在5.0版本之后取消了对于web容器的依赖，或者说，内置了Jetty容器而不是以war包的形式发布。5.0版本后的部署非常简单，达到了开箱即用的效果。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd /opt</span><br><span class="line">wget http:<span class="comment">//mirror.bit.edu.cn/apache/lucene/solr/5.3.1/solr-5.3.1.tgz</span></span><br><span class="line">tar zxvf solr-<span class="number">5.3</span><span class="number">.1</span>.tgz -C /opt</span><br><span class="line">cd /opt/solr-<span class="number">5.3</span><span class="number">.1</span>/bin</span><br><span class="line">./solr start <span class="preprocessor">#启动</span></span><br><span class="line">./solr stop <span class="preprocessor">#停止</span></span><br><span class="line">./solr restart -p <span class="number">8983</span> <span class="preprocessor">#重启<span class="number">8983</span>端口的solr</span></span><br><span class="line">./solr start -help <span class="preprocessor">#详细帮助，可以切换端口，重设solrhome等</span></span><br></pre></td></tr></table></figure></p>
+<p>启动后，会看到<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Waiting up <span class="keyword">to</span> <span class="number">30</span> seconds <span class="keyword">to</span> see Solr <span class="property">running</span> <span class="function_start"><span class="keyword">on</span></span> port <span class="number">8983</span> [/]  </span><br><span class="line">Started Solr server <span class="function_start"><span class="keyword">on</span></span> port <span class="number">8983</span> (pid=<span class="number">1248</span>). Happy searching!</span><br></pre></td></tr></table></figure></p>
+<p>这时候访问 host:port/solr/（本地默认为<a href="http://localhost:8983/solr/" target="_blank" rel="external">http://localhost:8983/solr/</a> ） 如果看到solr的网页管理页面，大功告成！是不是很easy？</p>
+<p>管理页面左侧有几个标签：</p>
+<ul>
+<li>Dashboard 可以看的solr的基本信息、配置、内存使用等</li>
+<li>Logging 网页版的日志输出，如果你在使用时遇到错误，可以在这里看到详细的报错信息</li>
+<li>Core Admin 管理你的Core，比如你更新了Core的配置，不用重启solr实例，在这里refresh一下就好</li>
+<li>Java Properties jvm的参数信息</li>
+<li>Thread Dunp 所有的线程信息</li>
+<li>Core Selector 选择一个Core，查看配置，进行自定义的查询等等</li>
+</ul>
+<h1 id="配置solrhome">配置solrhome</h1><p>如果保持默认设置，你的<code>{solrhome}</code>位于<code>{solr安装位置}/server/solr</code>，这个目录很重要，你的索引配置，搜索配置，数据等文件都位于这个目录下，我们接下来的工作，主要就在这个目录进行。为了方便，我们现在改变solrhome的位置，其实很简单，在启动solr的时候加入参数<code>-s &lt;dir&gt;</code>即可<br>在此之前，先在<code>/opt</code>下建立<code>mysolrhome</code>文件夹，而且<code>{solrhome}</code>要求必须含有一个<code>solr.xml</code>文件，我们直接从默认目录拷贝过来<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">solr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">solrcloud</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"host"</span>&gt;</span>$&#123;host:&#125;<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"hostPort"</span>&gt;</span>$&#123;jetty.port:8983&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"hostContext"</span>&gt;</span>$&#123;hostContext:solr&#125;<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">bool</span> <span class="attribute">name</span>=<span class="value">"genericCoreNodeNames"</span>&gt;</span>$&#123;genericCoreNodeNames:true&#125;<span class="tag">&lt;/<span class="title">bool</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"zkClientTimeout"</span>&gt;</span>$&#123;zkClientTimeout:30000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"distribUpdateSoTimeout"</span>&gt;</span>$&#123;distribUpdateSoTimeout:600000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"distribUpdateConnTimeout"</span>&gt;</span>$&#123;distribUpdateConnTimeout:60000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">solrcloud</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">shardHandlerFactory</span> <span class="attribute">name</span>=<span class="value">"shardHandlerFactory"</span></span><br><span class="line">    <span class="attribute">class</span>=<span class="value">"HttpShardHandlerFactory"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"socketTimeout"</span>&gt;</span>$&#123;socketTimeout:600000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"connTimeout"</span>&gt;</span>$&#123;connTimeout:60000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">shardHandlerFactory</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">solr</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后在bin目录输入<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./solr <span class="operator"><span class="keyword">stop</span> -<span class="keyword">p</span> <span class="number">8983</span> #停止时要用-<span class="keyword">p</span>指明停止的是哪个端口的solr</span><br><span class="line">./solr <span class="keyword">start</span> -s /opt/mysolrhome</span></span><br></pre></td></tr></table></figure></p>
+<p>打开管理页面，看到运行信息中<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dsolr<span class="class">.solr</span><span class="class">.home</span>=/opt/mysolrhome</span><br></pre></td></tr></table></figure></p>
+<p>就说明成功了</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/solr/">solr</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/solr/">solr</a><a href="/tags/搜索/">搜索</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://kkop233.github.io/solr/cigbsllrf0000r4nwj52rg7ug.html" data-title="Solr学习第01章：安装与配置 | BigCat的个人博客" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/solr/cigbslluw000er4nwpfk42qfa.html" title="Solr学习第02章：快速上手-创建索引">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Solr学习第02章：快速上手-创建索引</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、Solr简介"><span class="toc-number">1.</span> <span class="toc-text">一、Solr简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、Solr的安装"><span class="toc-number">2.</span> <span class="toc-text">二、Solr的安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#官方下载地址"><span class="toc-number">2.1.</span> <span class="toc-text">官方下载地址</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CentOS_7_下solr的安装部署"><span class="toc-number">2.2.</span> <span class="toc-text">CentOS 7 下solr的安装部署</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#配置solrhome"><span class="toc-number">3.</span> <span class="toc-text">配置solrhome</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/solr/" title="solr">solr<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/solr/" title="solr">solr<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/搜索/" title="搜索">搜索<sup>3</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=b3593ceb&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2015 
+		
+		<a href="/about" target="_blank" title="BigCat">BigCat</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fe6d1f421bbc9962127a50488f9ed37d1' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
