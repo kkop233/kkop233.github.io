@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Solr学习第01章：安装与配置 | BigCat的个人博客</title>
+  <meta name="author" content="BigCat">
+  
+  <meta name="description" content="一、Solr简介Apache Solr官网
+
+Solr is highly reliable, scalable and fault tolerant, providing distributed indexing,replication and load-balanced querying, au">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Solr学习第01章：安装与配置"/>
+  <meta property="og:site_name" content="BigCat的个人博客"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">BigCat的个人博客</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> Solr学习第01章：安装与配置</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h1 id="一、Solr简介">一、Solr简介</h1><p>Apache Solr官网</p>
+<blockquote>
+<p>Solr is highly reliable, scalable and fault tolerant, providing distributed indexing,<br>replication and load-balanced querying, automated failover and recovery, centralized configuration and more.<br>Solr powers the search and navigation features of many of the world’s largest internet sites. –Apache Solr官网<br>百度百科<br>Solr是一个高性能，采用Java5开发，基于Lucene的全文搜索服务器。同时对其进行了扩展，提供了比Lucene更为丰富的查询语言，<br>同时实现了可配置、可扩展并对查询性能进行了优化，并且提供了一个完善的功能管理界面，是一款非常优秀的全文搜索引擎。–百度百科</p>
+</blockquote>
+<p>总而言之，Solr是一个开源的基于java的搜索解决方案，如果你想部署自己的搜索服务，不想受制于第三方搜索服务的限制，那么选择Solr吧，它一定不会让你失望</p>
+<h1 id="二、Solr的安装">二、Solr的安装</h1><h2 id="官方下载地址">官方下载地址</h2><p>下载地址 <code>http://lucene.apache.org/solr/mirrors-solr-latest-redir.html</code></p>
+<h2 id="CentOS_7_下solr的安装部署">CentOS 7 下solr的安装部署</h2><p>Solr版本 <code>5.7.1</code><br>Solr在5.0版本之后取消了对于web容器的依赖，或者说，内置了Jetty容器而不是以war包的形式发布。5.0版本后的部署非常简单，达到了开箱即用的效果。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd /opt</span><br><span class="line">wget http:<span class="comment">//mirror.bit.edu.cn/apache/lucene/solr/5.3.1/solr-5.3.1.tgz</span></span><br><span class="line">tar zxvf solr-<span class="number">5.3</span><span class="number">.1</span>.tgz -C /opt</span><br><span class="line">cd /opt/solr-<span class="number">5.3</span><span class="number">.1</span>/bin</span><br><span class="line">./solr start <span class="preprocessor">#启动</span></span><br><span class="line">./solr stop <span class="preprocessor">#停止</span></span><br><span class="line">./solr restart -p <span class="number">8983</span> <span class="preprocessor">#重启<span class="number">8983</span>端口的solr</span></span><br><span class="line">./solr start -help <span class="preprocessor">#详细帮助，可以切换端口，重设solrhome等</span></span><br></pre></td></tr></table></figure></p>
+<p>启动后，会看到<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Waiting up <span class="keyword">to</span> <span class="number">30</span> seconds <span class="keyword">to</span> see Solr <span class="property">running</span> <span class="function_start"><span class="keyword">on</span></span> port <span class="number">8983</span> [/]  </span><br><span class="line">Started Solr server <span class="function_start"><span class="keyword">on</span></span> port <span class="number">8983</span> (pid=<span class="number">1248</span>). Happy searching!</span><br></pre></td></tr></table></figure></p>
+<p>这时候访问 host:port/solr/（本地默认为<a href="http://localhost:8983/solr/" target="_blank" rel="external">http://localhost:8983/solr/</a> ） 如果看到solr的网页管理页面，大功告成！是不是很easy？</p>
+<p>管理页面左侧有几个标签：</p>
+<ul>
+<li>Dashboard 可以看的solr的基本信息、配置、内存使用等</li>
+<li>Logging 网页版的日志输出，如果你在使用时遇到错误，可以在这里看到详细的报错信息</li>
+<li>Core Admin 管理你的Core，比如你更新了Core的配置，不用重启solr实例，在这里refresh一下就好</li>
+<li>Java Properties jvm的参数信息</li>
+<li>Thread Dunp 所有的线程信息</li>
+<li>Core Selector 选择一个Core，查看配置，进行自定义的查询等等</li>
+</ul>
+<h1 id="配置solrhome">配置solrhome</h1><p>如果保持默认设置，你的<code>{solrhome}</code>位于<code>{solr安装位置}/server/solr</code>，这个目录很重要，你的索引配置，搜索配置，数据等文件都位于这个目录下，我们接下来的工作，主要就在这个目录进行。为了方便，我们现在改变solrhome的位置，其实很简单，在启动solr的时候加入参数<code>-s &lt;dir&gt;</code>即可<br>在此之前，先在<code>/opt</code>下建立<code>mysolrhome</code>文件夹，而且<code>{solrhome}</code>要求必须含有一个<code>solr.xml</code>文件，我们直接从默认目录拷贝过来<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">solr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">solrcloud</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"host"</span>&gt;</span>$&#123;host:&#125;<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"hostPort"</span>&gt;</span>$&#123;jetty.port:8983&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"hostContext"</span>&gt;</span>$&#123;hostContext:solr&#125;<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">bool</span> <span class="attribute">name</span>=<span class="value">"genericCoreNodeNames"</span>&gt;</span>$&#123;genericCoreNodeNames:true&#125;<span class="tag">&lt;/<span class="title">bool</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"zkClientTimeout"</span>&gt;</span>$&#123;zkClientTimeout:30000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"distribUpdateSoTimeout"</span>&gt;</span>$&#123;distribUpdateSoTimeout:600000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"distribUpdateConnTimeout"</span>&gt;</span>$&#123;distribUpdateConnTimeout:60000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">solrcloud</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">shardHandlerFactory</span> <span class="attribute">name</span>=<span class="value">"shardHandlerFactory"</span></span><br><span class="line">    <span class="attribute">class</span>=<span class="value">"HttpShardHandlerFactory"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"socketTimeout"</span>&gt;</span>$&#123;socketTimeout:600000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"connTimeout"</span>&gt;</span>$&#123;connTimeout:60000&#125;<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">shardHandlerFactory</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">solr</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后在bin目录输入<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./solr <span class="operator"><span class="keyword">stop</span> -<span class="keyword">p</span> <span class="number">8983</span> #停止时要用-<span class="keyword">p</span>指明停止的是哪个端口的solr</span><br><span class="line">./solr <span class="keyword">start</span> -s /opt/mysolrhome</span></span><br></pre></td></tr></table></figure></p>
+<p>打开管理页面，看到运行信息中<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dsolr<span class="class">.solr</span><span class="class">.home</span>=/opt/mysolrhome</span><br></pre></td></tr></table></figure></p>
+<p>就说明成功了</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/solr/cigbsatwc000eognwyn5wl0zl.html" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+          <li class="next disabled"><a>下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+</section>
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2015-10-28 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/solr/">solr<span>3</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/solr/">solr<span>3</span></a></li> <li><a href="/tags/搜索/">搜索<span>3</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2015 BigCat
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+</body>
+   </html>

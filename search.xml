@@ -1,122 +1,12 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  <title>BigCat的个人博客</title>
-  <meta name="author" content="BigCat">
+<?xml version="1.0" encoding="utf-8"?>
+<search>
   
   
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-  
-  <meta property="og:site_name" content="BigCat的个人博客"/>
-
-  
-    <meta property="og:image" content="undefined"/>
-  
-
-  
-  
-    <link href="/favicon.png" rel="icon">
-  
-  
-  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
-  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
-  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
-  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
-  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
-  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-
-  <script src="/js/jquery-2.0.3.min.js"></script>
-
-  <!-- analytics -->
-  
-
-
-
-</head>
-
- <body>  
-  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-		<span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-	  <a class="navbar-brand" href="/">BigCat的个人博客</a>
-      <div class="collapse navbar-collapse nav-menu">
-		<ul class="nav navbar-nav">
-		  
-		  <li>
-			<a href="/archives" title="All the articles.">
-			  <i class="fa fa-archive"></i>Archives
-			</a>
-		  </li>
-		  
-		  <li>
-			<a href="/categories" title="All the categories.">
-			  <i class="fa fa-folder"></i>Categories
-			</a>
-		  </li>
-		  
-		  <li>
-			<a href="/tags" title="All the tags.">
-			  <i class="fa fa-tags"></i>Tags
-			</a>
-		  </li>
-		  
-		  <li>
-			<a href="/about" title="About me.">
-			  <i class="fa fa-user"></i>About
-			</a>
-		  </li>
-		  
-		</ul>
-      </div>
-    </div> <!-- container -->
-</nav>
-<div class="clearfix"></div>
-
-  <div class="container">
-  	<div class="content">
-    	 <div class="page-header">
-  <h1>BigCat的个人博客</h1>
-</div>
-
-<div class="row page">
-
-	
-	<div class="col-md-9">
-	
-
-		<div class="slogan">
-      <i class="fa fa-heart"></i>
-      About a coder and a gamer
-</div>    
-		<div id="top_search"></div>
-		<div class="mypage">
-		
-		<!-- title and entry -->
-		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-10-29 </div>
-			<div class="article-title"><a href="/solr/cigbsatw8000aognweb0g07ij.html" >Solr学习第03章：快速上手-客户端</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h1 id="SolrJ使用">SolrJ使用</h1><p>上一章我们配置了索引，导入了数据，并且实现了再solr的管理页面搜索数据。但是我们现在面临一个问题，虽然可以用http的方式与solr交互了，但非常的不方便。请求必须自己拼凑字符串，response也必须自己手动处理长长的json字符串，成功失败的状态也必须自己解析等等。<br>好在Solr的开发者已经帮助我们开发好了各种语言使用的客户端，这个客户端可以类比为连接MySQL的JDBC。<br>我们先建立个简单的Java项目，拷贝<code>solr-5.3.1\dist</code>目录下的<code>solr-solrj-5.3.1.jar</code>，以及<code>solr-5.3.1\dist\solrj-lib</code>下的所有jar引入工程，可能还缺少一个commons-logging.jar，百度下载即可。<br>jar包导入后编写代码：<br>Student.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> solrj;</span><br><span class="line"><span class="comment">//省略import</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> Date birthday;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> avg_score;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; hobby;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> String motto;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(<span class="keyword">int</span> id, String name, Date birthday, <span class="keyword">double</span> avg_score,</span><br><span class="line">            List&lt;String&gt; hobby)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.birthday = birthday;</span><br><span class="line">        <span class="keyword">this</span>.avg_score = avg_score;</span><br><span class="line">        <span class="keyword">this</span>.hobby = hobby;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Student [id="</span> + id + <span class="string">", name="</span> + name + <span class="string">", birthday="</span></span><br><span class="line">                + birthday + <span class="string">", avg_score="</span> + avg_score + <span class="string">", hobby="</span> + hobby</span><br><span class="line">                + <span class="string">", motto="</span> + motto + <span class="string">"]"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">      <span class="comment">// 省略get set方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+    
+    <entry>
+      <title><![CDATA[Solr学习第03章：快速上手-客户端]]></title>
+      <url>http://kkop233.github.io/solr/cigbsatw8000aognweb0g07ij.html</url>
+      <content type="html"><![CDATA[<h1 id="SolrJ使用">SolrJ使用</h1><p>上一章我们配置了索引，导入了数据，并且实现了再solr的管理页面搜索数据。但是我们现在面临一个问题，虽然可以用http的方式与solr交互了，但非常的不方便。请求必须自己拼凑字符串，response也必须自己手动处理长长的json字符串，成功失败的状态也必须自己解析等等。<br>好在Solr的开发者已经帮助我们开发好了各种语言使用的客户端，这个客户端可以类比为连接MySQL的JDBC。<br>我们先建立个简单的Java项目，拷贝<code>solr-5.3.1\dist</code>目录下的<code>solr-solrj-5.3.1.jar</code>，以及<code>solr-5.3.1\dist\solrj-lib</code>下的所有jar引入工程，可能还缺少一个commons-logging.jar，百度下载即可。<br>jar包导入后编写代码：<br>Student.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> solrj;</span><br><span class="line"><span class="comment">//省略import</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> Date birthday;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> avg_score;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; hobby;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> String motto;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(<span class="keyword">int</span> id, String name, Date birthday, <span class="keyword">double</span> avg_score,</span><br><span class="line">            List&lt;String&gt; hobby)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.birthday = birthday;</span><br><span class="line">        <span class="keyword">this</span>.avg_score = avg_score;</span><br><span class="line">        <span class="keyword">this</span>.hobby = hobby;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Student [id="</span> + id + <span class="string">", name="</span> + name + <span class="string">", birthday="</span></span><br><span class="line">                + birthday + <span class="string">", avg_score="</span> + avg_score + <span class="string">", hobby="</span> + hobby</span><br><span class="line">                + <span class="string">", motto="</span> + motto + <span class="string">"]"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">      <span class="comment">// 省略get set方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>注意Student中的field必须用@Field注解<br>Main.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> solrj;</span><br><span class="line"><span class="comment">//省略import</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> String url=<span class="string">"http://host:port/solr/student"</span>;   <span class="comment">//注意改成你的地址</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span> <span class="keyword">throws</span> SolrServerException, IOException </span>&#123;</span><br><span class="line">        List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">        list.add(<span class="string">"暴走"</span>);</span><br><span class="line">        list.add(<span class="string">"漫画"</span>);</span><br><span class="line">        list.add(<span class="string">"篮球"</span>);</span><br><span class="line">        SolrInputDocument doc=<span class="keyword">new</span> SolrInputDocument();</span><br><span class="line">        doc.setField(<span class="string">"id"</span>, <span class="number">666</span>);</span><br><span class="line">        doc.setField(<span class="string">"name"</span>, <span class="string">"王尼玛"</span>);</span><br><span class="line">        doc.setField(<span class="string">"birthday"</span>, <span class="keyword">new</span> Date());</span><br><span class="line">        doc.setField(<span class="string">"avg_score"</span>, <span class="number">9.9</span>);</span><br><span class="line">        doc.setField(<span class="string">"hobby"</span>, list); <span class="comment">// list可以是继承Collection的对象</span></span><br><span class="line">        doc.setField(<span class="string">"motto"</span>, <span class="string">"fxxk my life"</span>);</span><br><span class="line">        </span><br><span class="line">        SolrClient server = <span class="keyword">new</span>    HttpSolrClient(url);</span><br><span class="line">        UpdateResponse response=server.add(doc);</span><br><span class="line">        server.commit();</span><br><span class="line">        server.close();</span><br><span class="line">        System.out.println(response.toString());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">search</span><span class="params">()</span> <span class="keyword">throws</span> SolrServerException, IOException </span>&#123;</span><br><span class="line">        SolrClient server = <span class="keyword">new</span>    HttpSolrClient(url);</span><br><span class="line">        SolrQuery query=<span class="keyword">new</span> SolrQuery();</span><br><span class="line">        query.set(<span class="string">"q"</span>, <span class="string">"hobby:篮球 AND id:[2 TO *]"</span>);</span><br><span class="line">        QueryResponse response=server.query(query);</span><br><span class="line">        List&lt;Student&gt; list=response.getBeans(Student.class);</span><br><span class="line">        server.close();</span><br><span class="line">        <span class="keyword">for</span> (Student student : list) &#123;</span><br><span class="line">            System.out.println(student.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> SolrServerException, IOException </span>&#123;</span><br><span class="line">        add();</span><br><span class="line">        search();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>注意事项：</p>
 <ul>
@@ -125,28 +15,13 @@
 <li>Java bean里面需要存储的字段注意使用注解标注</li>
 </ul>
 <p>运行结果：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;responseHeader=&#123;status=<span class="number">0</span>,QTime=<span class="number">58</span>&#125;&#125;</span><br><span class="line">Student [id=<span class="number">3</span>, name=李明, birthday=Tue Jan <span class="number">01</span> <span class="number">08</span>:<span class="number">00</span>:<span class="number">00</span> CST <span class="number">1991</span>, avg_score=<span class="number">111.0</span>, hobby=[篮球, 看电影, 夜跑], motto=null]</span><br><span class="line">Student [id=<span class="number">666</span>, name=王尼玛, birthday=Thu Oct <span class="number">29</span> <span class="number">11</span>:<span class="number">32</span>:<span class="number">22</span> CST <span class="number">2015</span>, avg_score=<span class="number">9.9</span>, hobby=[暴走, 漫画, 篮球], motto=fxxk my life]</span><br></pre></td></tr></table></figure></p>
-
-	
-	</div>
-  <a type="button" href="/solr/cigbsatw8000aognweb0g07ij.html#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-10-29 </div>
-			<div class="article-title"><a href="/solr/cigbsatwc000eognwyn5wl0zl.html" >Solr学习第02章：快速上手-创建索引</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>快速上手旨在最快速的建立一个可用的Demo工程，对solr的整个使用过程做一个概况的了解，忽略详细难以理解的超多配置，对进一步的学习起到构建大致框架的作用。</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Solr学习第02章：快速上手-创建索引]]></title>
+      <url>http://kkop233.github.io/solr/cigbsatwc000eognwyn5wl0zl.html</url>
+      <content type="html"><![CDATA[<p>快速上手旨在最快速的建立一个可用的Demo工程，对solr的整个使用过程做一个概况的了解，忽略详细难以理解的超多配置，对进一步的学习起到构建大致框架的作用。</p>
 <h1 id="一、Core的建立">一、Core的建立</h1><p>在Solr中，一个core就可以简单的类比为关系数据库中的表，一个core可以对应web开发中的java bean，例如，我们可以建立一个“学生”core：</p>
 <h2 id="1-_手动建立core目录和配置文件">1. 手动建立core目录和配置文件</h2><p>打开{solrhome}，以<code>student</code> core 为例</p>
 <pre><code>+ 建立<span class="escape">`s</span>tudent/conf<span class="escape">`文</span>件夹
@@ -169,28 +44,13 @@
 <p>如果在建立core的时候发生错误，管理页面会一直有个错误提示去不掉，你可以完全删除core文件夹，重启solr再重复建core操作，即可解决。</p>
 <h1 id="二、数据导入">二、数据导入</h1><p>使用upload方法导入一批数据。打开管理页面 core-selector-&gt;student-&gt;Documents，选择json方式分别导入了以下三条数据：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  "<span class="attribute">id</span>": <span class="value"><span class="number">1</span></span>,</span><br><span class="line">  "<span class="attribute">name</span>": <span class="value"><span class="string">"James"</span></span>,</span><br><span class="line">  "<span class="attribute">birthday</span>": <span class="value"><span class="string">"1991-01-01T00:00:00Z"</span></span>,</span><br><span class="line">  "<span class="attribute">avg_score</span>": <span class="value"><span class="number">111</span></span>,</span><br><span class="line">  "<span class="attribute">hobby</span>": <span class="value">[</span><br><span class="line">    <span class="string">"篮球"</span></span><br><span class="line">  ]</span>,</span><br><span class="line">  "<span class="attribute">motto</span>": <span class="value"><span class="string">"业精于勤,荒于嬉.行成于思,毁于随"</span></span><br><span class="line"></span>&#125;</span><br><span class="line">&#123;</span><br><span class="line">  "<span class="attribute">id</span>": <span class="value"><span class="number">2</span></span>,</span><br><span class="line">  "<span class="attribute">name</span>": <span class="value"><span class="string">"小王"</span></span>,</span><br><span class="line">  "<span class="attribute">birthday</span>": <span class="value"><span class="string">"1991-01-01T00:00:00Z"</span></span>,</span><br><span class="line">  "<span class="attribute">avg_score</span>": <span class="value"><span class="number">111</span></span>,</span><br><span class="line">  "<span class="attribute">hobby</span>": <span class="value">[</span><br><span class="line">    <span class="string">"唱K"</span></span><br><span class="line">  ]</span>,</span><br><span class="line">  "<span class="attribute">motto</span>": <span class="value"><span class="string">"To be, or not to be: that is the question"</span></span><br><span class="line"></span>&#125;</span><br><span class="line">&#123;</span><br><span class="line">  "<span class="attribute">id</span>": <span class="value"><span class="number">3</span></span>,</span><br><span class="line">  "<span class="attribute">name</span>": <span class="value"><span class="string">"李明"</span></span>,</span><br><span class="line">  "<span class="attribute">birthday</span>": <span class="value"><span class="string">"1991-01-01T00:00:00Z"</span></span>,</span><br><span class="line">  "<span class="attribute">avg_score</span>": <span class="value"><span class="number">111</span></span>,</span><br><span class="line">  "<span class="attribute">hobby</span>": <span class="value">[</span><br><span class="line">    <span class="string">"篮球"</span>,</span><br><span class="line">    <span class="string">"看电影"</span>,</span><br><span class="line">    <span class="string">"夜跑"</span></span><br><span class="line">  ]</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure></p>
 <p>这样一来，索引就算是创建好了，而且我们也导入了需要搜索的数据，打开Query界面，可以在这里进行简单的查询，看看我们刚刚导入的数据如何。<br>修改”q”字段为 <code>hobby:篮球</code>，点击查询，可以看到id=1,3的doc被查询了出来，说明我们导入的数据已经被成功索引了。注意，solr还帮我们在数据上方生成了这一次索引的请求url，<a href="http://182.92.158.145:8983/solr/student/select?q=hobby%3A%E7%AF%AE%E7%90%83&amp;wt=json&amp;indent=true" target="_blank" rel="external">http://182.92.158.145:8983/solr/student/select?q=hobby%3A%E7%AF%AE%E7%90%83&amp;wt=json&amp;indent=true</a></p>
-
-	
-	</div>
-  <a type="button" href="/solr/cigbsatwc000eognwyn5wl0zl.html#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2015-10-28 </div>
-			<div class="article-title"><a href="/solr/cigbsatur0000ognwhganvtvb.html" >Solr学习第01章：安装与配置</a></div>						
-		</h3>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h1 id="一、Solr简介">一、Solr简介</h1><p>Apache Solr官网</p>
+]]></content>
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Solr学习第01章：安装与配置]]></title>
+      <url>http://kkop233.github.io/solr/cigbsatur0000ognwhganvtvb.html</url>
+      <content type="html"><![CDATA[<h1 id="一、Solr简介">一、Solr简介</h1><p>Apache Solr官网</p>
 <blockquote>
 <p>Solr is highly reliable, scalable and fault tolerant, providing distributed indexing,<br>replication and load-balanced querying, automated failover and recovery, centralized configuration and more.<br>Solr powers the search and navigation features of many of the world’s largest internet sites. –Apache Solr官网<br>百度百科<br>Solr是一个高性能，采用Java5开发，基于Lucene的全文搜索服务器。同时对其进行了扩展，提供了比Lucene更为丰富的查询语言，<br>同时实现了可配置、可扩展并对查询性能进行了优化，并且提供了一个完善的功能管理界面，是一款非常优秀的全文搜索引擎。–百度百科</p>
 </blockquote>
@@ -212,153 +72,9 @@
 <p>然后在bin目录输入<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./solr <span class="operator"><span class="keyword">stop</span> -<span class="keyword">p</span> <span class="number">8983</span> #停止时要用-<span class="keyword">p</span>指明停止的是哪个端口的solr</span><br><span class="line">./solr <span class="keyword">start</span> -s /opt/mysolrhome</span></span><br></pre></td></tr></table></figure></p>
 <p>打开管理页面，看到运行信息中<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dsolr<span class="class">.solr</span><span class="class">.home</span>=/opt/mysolrhome</span><br></pre></td></tr></table></figure></p>
 <p>就说明成功了</p>
-
-	
-	</div>
-  <a type="button" href="/solr/cigbsatur0000ognwhganvtvb.html#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-
-		</div>
-
-		<!-- pagination -->
-		<div>
-  		<center>
-		<div class="pagination">
-<ul class="pagination">
-	 
-</ul>
-</div>
-
-  		</center>
-		</div>
-
-		
-		
-	</div> <!-- col-md-9 -->
-
-	
-		<div class="col-md-3">
-	<div id="sidebar">
-	
-			
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
-   </div>  
-  <div id="local-search-result"></div>
-  </div>
-
-
-		
-			
-	<div class="widget">
-		<h4>分类</h4>
-		<ul class="tag_box inline list-unstyled">
-		
-			<li><a href="/categories/solr/">solr<span>3</span></a></li>
-		
-		</ul>
-	</div>
-
-		
-			
-	<div class="widget">
-		<h4>标签云</h4>
-		<ul class="tag_box inline list-unstyled">		
-		
-			<li><a href="/tags/solr/">solr<span>3</span></a></li>
-		
-			<li><a href="/tags/搜索/">搜索<span>3</span></a></li>
-		
-		 
-		</ul>
-	</div>
-
-
-		
-			
-<div class="widget">
-  <h4>最新文章</h4>
-  <ul class="entry list-unstyled">
+]]></content>
+    </entry>
     
-      <li>
-        <a href="/solr/cigbsatw8000aognweb0g07ij.html" ><i class="fa fa-file-o"></i>Solr学习第03章：快速上手-客户端...</a>
-      </li>
-    
-      <li>
-        <a href="/solr/cigbsatwc000eognwyn5wl0zl.html" ><i class="fa fa-file-o"></i>Solr学习第02章：快速上手-创建索引...</a>
-      </li>
-    
-      <li>
-        <a href="/solr/cigbsatur0000ognwhganvtvb.html" ><i class="fa fa-file-o"></i>Solr学习第01章：安装与配置...</a>
-      </li>
-    
-  </ul>
-</div>
-
-		
-			
-<div class="widget">
-	<h4>链接</h4>
-	<ul class="blogroll list-unstyled">
-	
-		<li><i class="fa fa-github"></i><a href="https://github.com/wzpan/freemind/" title="Freemind's Github repository." target="_blank"]);">Freemind</a></li>
-	
-	</ul>
-</div>
-
-
-		
-	</div> <!-- sidebar -->
-</div> <!-- col-md-3 -->
-
-	
-	
-</div> <!-- row-fluid -->
-	</div>
-  </div>
-  <div class="container-narrow">
-  <footer> <p>
-  &copy; 2015 BigCat
   
-      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
-</p> </footer>
-</div> <!-- container-narrow -->
   
-
-
-  
-<a id="gotop" href="#">   
-  <span>▲</span> 
-</a>
-
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/main.js"></script>
-<script src="/js/search.js"></script> 
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-(function($){
-  $('.fancybox').fancybox();
-})(jQuery);
-</script>
-
-
-
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
-   </script>
-
-</body>
-   </html>
+</search>
