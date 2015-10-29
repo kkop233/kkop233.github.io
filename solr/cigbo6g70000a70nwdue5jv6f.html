@@ -1,0 +1,340 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Solr学习第02章：快速上手-创建索引 | BigCat的个人博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="BigCat">
+    
+    <meta name="description" content="快速上手旨在最快速的建立一个可用的Demo工程，对solr的整个使用过程做一个概况的了解，忽略详细难以理解的超多配置，对进一步的学习起到构建大致框架的作用。
+一、Core的建立在Solr中，一个core就可以简单的类比为关系数据库中的表，一个core可以对应web开发中的java bean，例如，我">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="BigCat的个人博客" title="BigCat的个人博客"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="BigCat的个人博客">BigCat的个人博客</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:kkop233.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/solr/cigbo6g70000a70nwdue5jv6f.html" title="Solr学习第02章：快速上手-创建索引" itemprop="url">Solr学习第02章：快速上手-创建索引</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://kkop233.github.io" title="BigCat">BigCat</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-10-29T03:23:16.000Z" itemprop="datePublished">2015-10-29</time>
+    更新日期:<time datetime="2015-10-29T03:24:12.228Z" itemprop="dateModified">2015-10-29</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、Core的建立"><span class="toc-number">1.</span> <span class="toc-text">一、Core的建立</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-_手动建立core目录和配置文件"><span class="toc-number">1.1.</span> <span class="toc-text">1. 手动建立core目录和配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_在管理页面建立core"><span class="toc-number">1.2.</span> <span class="toc-text">2. 在管理页面建立core</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、数据导入"><span class="toc-number">2.</span> <span class="toc-text">二、数据导入</span></a></li></ol>
+		</div>
+		
+		<p>快速上手旨在最快速的建立一个可用的Demo工程，对solr的整个使用过程做一个概况的了解，忽略详细难以理解的超多配置，对进一步的学习起到构建大致框架的作用。</p>
+<h1 id="一、Core的建立">一、Core的建立</h1><p>在Solr中，一个core就可以简单的类比为关系数据库中的表，一个core可以对应web开发中的java bean，例如，我们可以建立一个“学生”core：</p>
+<h2 id="1-_手动建立core目录和配置文件">1. 手动建立core目录和配置文件</h2><p>打开{solrhome}，以<code>student</code> core 为例</p>
+<pre><code>+ 建立<span class="escape">`s</span>tudent/conf<span class="escape">`文</span>件夹
++ 在<span class="escape">`c</span>onf<span class="escape">`下</span>创建<span class="escape">`s</span>chema.xml<span class="escape">`和</span><span class="escape">`s</span>olrconfig.xml<span class="escape">`文</span>件
+</code></pre><p>这两个文件的sample在你下载的solr程序的<code>example</code>文件夹下有，带很多注释，我们编辑后的两个文件为：<br>schema.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">schema</span> <span class="attribute">name</span>=<span class="value">"student"</span> <span class="attribute">version</span>=<span class="value">"1.5"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">field</span> <span class="attribute">name</span>=<span class="value">"id"</span> <span class="attribute">type</span>=<span class="value">"int"</span> <span class="attribute">indexed</span>=<span class="value">"true"</span> <span class="attribute">stored</span>=<span class="value">"true"</span> <span class="attribute">required</span>=<span class="value">"true"</span> <span class="attribute">multiValued</span>=<span class="value">"false"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">field</span> <span class="attribute">name</span>=<span class="value">"name"</span> <span class="attribute">type</span>=<span class="value">"string"</span> <span class="attribute">indexed</span>=<span class="value">"true"</span> <span class="attribute">stored</span>=<span class="value">"true"</span> <span class="attribute">required</span>=<span class="value">"true"</span> <span class="attribute">multiValued</span>=<span class="value">"false"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">field</span> <span class="attribute">name</span>=<span class="value">"birthday"</span> <span class="attribute">type</span>=<span class="value">"date"</span> <span class="attribute">indexed</span>=<span class="value">"true"</span> <span class="attribute">stored</span>=<span class="value">"true"</span> <span class="attribute">required</span>=<span class="value">"true"</span> <span class="attribute">multiValued</span>=<span class="value">"false"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">field</span> <span class="attribute">name</span>=<span class="value">"avg_score"</span> <span class="attribute">type</span>=<span class="value">"double"</span> <span class="attribute">indexed</span>=<span class="value">"true"</span> <span class="attribute">stored</span>=<span class="value">"true"</span> <span class="attribute">required</span>=<span class="value">"true"</span> <span class="attribute">multiValued</span>=<span class="value">"false"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">field</span> <span class="attribute">name</span>=<span class="value">"hobby"</span> <span class="attribute">type</span>=<span class="value">"string"</span> <span class="attribute">indexed</span>=<span class="value">"true"</span> <span class="attribute">stored</span>=<span class="value">"true"</span> <span class="attribute">required</span>=<span class="value">"true"</span> <span class="attribute">multiValued</span>=<span class="value">"true"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">field</span> <span class="attribute">name</span>=<span class="value">"motto"</span> <span class="attribute">type</span>=<span class="value">"string"</span> <span class="attribute">indexed</span>=<span class="value">"false"</span> <span class="attribute">stored</span>=<span class="value">"true"</span> <span class="attribute">required</span>=<span class="value">"false"</span> <span class="attribute">multiValued</span>=<span class="value">"false"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">uniqueKey</span>&gt;</span>id<span class="tag">&lt;/<span class="title">uniqueKey</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">field</span> <span class="attribute">name</span>=<span class="value">"_version_"</span> <span class="attribute">type</span>=<span class="value">"long"</span>     <span class="attribute">indexed</span>=<span class="value">"true"</span>  <span class="attribute">stored</span>=<span class="value">"true"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">fieldtype</span> <span class="attribute">name</span>=<span class="value">"string"</span>  <span class="attribute">class</span>=<span class="value">"solr.StrField"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">fieldType</span> <span class="attribute">name</span>=<span class="value">"int"</span> <span class="attribute">class</span>=<span class="value">"solr.TrieIntField"</span> <span class="attribute">precisionStep</span>=<span class="value">"0"</span> <span class="attribute">positionIncrementGap</span>=<span class="value">"0"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">fieldType</span> <span class="attribute">name</span>=<span class="value">"double"</span> <span class="attribute">class</span>=<span class="value">"solr.TrieDoubleField"</span> <span class="attribute">precisionStep</span>=<span class="value">"0"</span> <span class="attribute">positionIncrementGap</span>=<span class="value">"0"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">fieldType</span> <span class="attribute">name</span>=<span class="value">"date"</span> <span class="attribute">class</span>=<span class="value">"solr.TrieDateField"</span> <span class="attribute">precisionStep</span>=<span class="value">"0"</span> <span class="attribute">positionIncrementGap</span>=<span class="value">"0"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">fieldType</span> <span class="attribute">name</span>=<span class="value">"long"</span> <span class="attribute">class</span>=<span class="value">"solr.TrieLongField"</span> <span class="attribute">precisionStep</span>=<span class="value">"0"</span> <span class="attribute">positionIncrementGap</span>=<span class="value">"0"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">schema</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>一个学生我们定义了6个字段，其中值得注意的是：</p>
+<pre><code>+ 有个主键“<span class="property">id</span>”，没什么特殊需求的话这个字段必须有，用uniqueKey来指出，也可以是<span class="type">string</span>
++ hobby（爱好）multiValued=<span class="constant">true</span>，这个字段可以有多个值
++ motto（座右铭）indexed=<span class="constant">false</span>，这个字段不能被用于检索和排序
+</code></pre><p>solrconfig.xml 这个文件很长，但是刚开始不用每一项都搞清楚，直接使用默认配置就可以<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">config</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">luceneMatchVersion</span>&gt;</span>5.2.0<span class="tag">&lt;/<span class="title">luceneMatchVersion</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">dataDir</span>&gt;</span>$&#123;solr.data.dir:&#125;<span class="tag">&lt;/<span class="title">dataDir</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">directoryFactory</span> <span class="attribute">name</span>=<span class="value">"DirectoryFactory"</span> </span><br><span class="line">                    <span class="attribute">class</span>=<span class="value">"$&#123;solr.directoryFactory:solr.NRTCachingDirectoryFactory&#125;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">directoryFactory</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="title">codecFactory</span> <span class="attribute">class</span>=<span class="value">"solr.SchemaCodecFactory"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">schemaFactory</span> <span class="attribute">class</span>=<span class="value">"ClassicIndexSchemaFactory"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">indexConfig</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">lockType</span>&gt;</span>$&#123;solr.lock.type:native&#125;<span class="tag">&lt;/<span class="title">lockType</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">infoStream</span>&gt;</span>true<span class="tag">&lt;/<span class="title">infoStream</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">indexConfig</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">updateHandler</span> <span class="attribute">class</span>=<span class="value">"solr.DirectUpdateHandler2"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">updateLog</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"dir"</span>&gt;</span>$&#123;solr.ulog.dir:&#125;<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">updateLog</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">autoCommit</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">maxTime</span>&gt;</span>$&#123;solr.autoCommit.maxTime:1500&#125;<span class="tag">&lt;/<span class="title">maxTime</span>&gt;</span> </span><br><span class="line">       <span class="tag">&lt;<span class="title">openSearcher</span>&gt;</span>true<span class="tag">&lt;/<span class="title">openSearcher</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;/<span class="title">autoCommit</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">updateHandler</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">query</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">maxBooleanClauses</span>&gt;</span>1024<span class="tag">&lt;/<span class="title">maxBooleanClauses</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">query</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">requestHandler</span> <span class="attribute">name</span>=<span class="value">"/select"</span> <span class="attribute">class</span>=<span class="value">"solr.SearchHandler"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">lst</span> <span class="attribute">name</span>=<span class="value">"defaults"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"echoParams"</span>&gt;</span>explicit<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">int</span> <span class="attribute">name</span>=<span class="value">"rows"</span>&gt;</span>10<span class="tag">&lt;/<span class="title">int</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"df"</span>&gt;</span>text<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="title">lst</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">requestHandler</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">requestHandler</span> <span class="attribute">name</span>=<span class="value">"/query"</span> <span class="attribute">class</span>=<span class="value">"solr.SearchHandler"</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="title">lst</span> <span class="attribute">name</span>=<span class="value">"defaults"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"echoParams"</span>&gt;</span>explicit<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"wt"</span>&gt;</span>json<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"indent"</span>&gt;</span>true<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="title">str</span> <span class="attribute">name</span>=<span class="value">"df"</span>&gt;</span>text<span class="tag">&lt;/<span class="title">str</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="title">lst</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">requestHandler</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="title">admin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">defaultQuery</span>&gt;</span>*:*<span class="tag">&lt;/<span class="title">defaultQuery</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="title">admin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">config</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>为了方便，autocommit设置为1.5秒提交一次，同时opwensearcher=true保证每次提交后新数据的可见性</p>
+<h2 id="2-_在管理页面建立core">2. 在管理页面建立core</h2><p>打开solr管理页面，在<code>Core Admin</code>选项里选择<code>Add Core</code>，这里会有几个属性：</p>
+<ul>
+<li><strong>name</strong> core的名称，和你的core文件夹名相同，这里是student</li>
+<li><strong>instanceDir</strong> core文件夹相对于solrhome的位置，这里就在solrhome下，直接填student，如果位于子目录下，就填比如<code>collection1/student</code>这种形式</li>
+<li><strong>dataDir</strong> core数据储存位置，这里默认</li>
+<li><strong>config</strong> solrconfig位置，默认</li>
+<li><strong>schema</strong> schema位置，默认</li>
+</ul>
+<p>如果在建立core的时候发生错误，管理页面会一直有个错误提示去不掉，你可以完全删除core文件夹，重启solr再重复建core操作，即可解决。</p>
+<h1 id="二、数据导入">二、数据导入</h1><p>使用upload方法导入一批数据。打开管理页面 core-selector-&gt;student-&gt;Documents，选择json方式分别导入了以下三条数据：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  "<span class="attribute">id</span>": <span class="value"><span class="number">1</span></span>,</span><br><span class="line">  "<span class="attribute">name</span>": <span class="value"><span class="string">"James"</span></span>,</span><br><span class="line">  "<span class="attribute">birthday</span>": <span class="value"><span class="string">"1991-01-01T00:00:00Z"</span></span>,</span><br><span class="line">  "<span class="attribute">avg_score</span>": <span class="value"><span class="number">111</span></span>,</span><br><span class="line">  "<span class="attribute">hobby</span>": <span class="value">[</span><br><span class="line">    <span class="string">"篮球"</span></span><br><span class="line">  ]</span>,</span><br><span class="line">  "<span class="attribute">motto</span>": <span class="value"><span class="string">"业精于勤,荒于嬉.行成于思,毁于随"</span></span><br><span class="line"></span>&#125;</span><br><span class="line">&#123;</span><br><span class="line">  "<span class="attribute">id</span>": <span class="value"><span class="number">2</span></span>,</span><br><span class="line">  "<span class="attribute">name</span>": <span class="value"><span class="string">"小王"</span></span>,</span><br><span class="line">  "<span class="attribute">birthday</span>": <span class="value"><span class="string">"1991-01-01T00:00:00Z"</span></span>,</span><br><span class="line">  "<span class="attribute">avg_score</span>": <span class="value"><span class="number">111</span></span>,</span><br><span class="line">  "<span class="attribute">hobby</span>": <span class="value">[</span><br><span class="line">    <span class="string">"唱K"</span></span><br><span class="line">  ]</span>,</span><br><span class="line">  "<span class="attribute">motto</span>": <span class="value"><span class="string">"To be, or not to be: that is the question"</span></span><br><span class="line"></span>&#125;</span><br><span class="line">&#123;</span><br><span class="line">  "<span class="attribute">id</span>": <span class="value"><span class="number">3</span></span>,</span><br><span class="line">  "<span class="attribute">name</span>": <span class="value"><span class="string">"李明"</span></span>,</span><br><span class="line">  "<span class="attribute">birthday</span>": <span class="value"><span class="string">"1991-01-01T00:00:00Z"</span></span>,</span><br><span class="line">  "<span class="attribute">avg_score</span>": <span class="value"><span class="number">111</span></span>,</span><br><span class="line">  "<span class="attribute">hobby</span>": <span class="value">[</span><br><span class="line">    <span class="string">"篮球"</span>,</span><br><span class="line">    <span class="string">"看电影"</span>,</span><br><span class="line">    <span class="string">"夜跑"</span></span><br><span class="line">  ]</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样一来，索引就算是创建好了，而且我们也导入了需要搜索的数据，打开Query界面，可以在这里进行简单的查询，看看我们刚刚导入的数据如何。<br>修改”q”字段为 <code>hobby:篮球</code>，点击查询，可以看到id=1,3的doc被查询了出来，说明我们导入的数据已经被成功索引了。注意，solr还帮我们在数据上方生成了这一次索引的请求url，<a href="http://182.92.158.145:8983/solr/student/select?q=hobby%3A%E7%AF%AE%E7%90%83&amp;wt=json&amp;indent=true" target="_blank" rel="external">http://182.92.158.145:8983/solr/student/select?q=hobby%3A%E7%AF%AE%E7%90%83&amp;wt=json&amp;indent=true</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/solr/">solr</a><a href="/tags/搜索/">搜索</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/solr/">solr</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://kkop233.github.io/solr/cigbo6g70000a70nwdue5jv6f.html" data-title="Solr学习第02章：快速上手-创建索引 | BigCat的个人博客" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/uncategorized/cigbo6g70000970nw2oc8adaz.html" title="Solr学习第03章：快速上手-客户端">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Solr学习第03章：快速上手-客户端</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/solr/cigbo6g5a000070nwas6jgd4b.html"  title="Solr学习第01章：安装与配置">
+ <strong>NEXT:</strong><br/> 
+ <span>Solr学习第01章：安装与配置
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、Core的建立"><span class="toc-number">1.</span> <span class="toc-text">一、Core的建立</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-_手动建立core目录和配置文件"><span class="toc-number">1.1.</span> <span class="toc-text">1. 手动建立core目录和配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-_在管理页面建立core"><span class="toc-number">1.2.</span> <span class="toc-text">2. 在管理页面建立core</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、数据导入"><span class="toc-number">2.</span> <span class="toc-text">二、数据导入</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/solr/" title="solr">solr<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/solr/" title="solr">solr<sup>2</sup></a></li>
+		
+			<li><a href="/tags/搜索/" title="搜索">搜索<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://kkop233.github.io" target="_blank" title="BigCat">BigCat</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>
