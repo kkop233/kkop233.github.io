@@ -4,8 +4,99 @@
   
     
     <entry>
+      <title><![CDATA[Solr学习第04章：查询]]></title>
+      <url>http://kkop233.github.io/solr/ciglxh0wt000axcnwbs7riiyv.html</url>
+      <content type="html"><![CDATA[<p>本章讲的是进行搜索时使用的语法，由于solr是基于lucene的搜索引擎，所以语法与lucene大同小异。内容大部分翻译自Solr Wiki，地址：<a href="http://wiki.apache.org/solr/SolrQuerySyntax" target="_blank" rel="external">http://wiki.apache.org/solr/SolrQuerySyntax</a></p>
+<h1 id="Lucene语法（注意和Solr有区别）">Lucene语法（注意和Solr有区别）</h1><h2 id="一、Terms_（条件）">一、Terms （条件）</h2><ul>
+<li>Single Term就是一个单词，例如”hello”</li>
+<li>多个单词由双引号包括组成了Phrase（短语），例如”hello world”</li>
+</ul>
+<h2 id="二、Field（字段）">二、Field（字段）</h2><p>基本用法为，字段：条件。例如 <code>name:&quot;Li Ming&quot;</code></p>
+<ul>
+<li>default字段不必指出，例如<code>&quot;hello world&quot;</code>即会自动搜索默认字段</li>
+<li>条件为一个Phrase时，必须用双引号表示</li>
+<li>查询多个字段时，可以用boolean符号连接，主义必须大写，例如<code>title:&quot;The Right Way&quot; AND text:go</code></li>
+</ul>
+<h2 id="三、Wildcard_Searches（通配符）">三、Wildcard Searches（通配符）</h2><p>在Single Term中可以使用通配符</p>
+<ul>
+<li>?代表一个字符</li>
+<li>*代表多个字符</li>
+<li>通配符不能位于开头</li>
+</ul>
+<h2 id="四、Regular_Expression_Searches（正则表达式）">四、Regular Expression Searches（正则表达式）</h2><p>用两个斜杠包括正则表达式以搜索，例如<code>/[mb]oat/</code>匹配moat和boat</p>
+<h2 id="五、Fuzzy_Searches（模糊搜索）">五、Fuzzy Searches（模糊搜索）</h2><p>支持Damerau-Levenshtein distance算法下的模糊搜索，用法是关键词后追加一个波浪线，例如<code>room~1</code>，这个对于中文的模糊搜索没有什么卵用，中文模糊全文搜索还是用分词方法实现比较好</p>
+<h2 id="六、Proximity_Searches（临近搜索）">六、Proximity Searches（临近搜索）</h2><p>用于当条件是一个短语的时候，例如<code>&quot;jakarta apache&quot;~10</code>，表示搜索含有这两个单词的文档，且之间的距离在10以内</p>
+<h2 id="七、Range_Searches（范围搜索）">七、Range Searches（范围搜索）</h2><p>语法为<code>[最小值 TO 最大值]</code>，用星号表示无限。例如<code>number:[1 TO 10]</code>，此外也支持日期和字符串的范围搜索，例如<code>mod_date:[20020101 TO 20030101] title:{Aida TO Carmen}</code></p>
+<h2 id="八、Boosting_a_Term（增加条件权重）">八、Boosting a Term（增加条件权重）</h2><p> <code>jakarta^4 apache</code>，用^增加了jakarta的权重，搜索偏重出现jakarta的结果。</p>
+<h2 id="九、Boolean_Operators（布尔运算符）">九、Boolean Operators（布尔运算符）</h2><p>有五个，分别是OR AND NOT + -</p>
+<h3 id="OR">OR</h3><blockquote>
+<p>The OR operator links two terms and finds a matching document if either of the terms exist in a document.</p>
+</blockquote>
+<p>OR运算符连接的条件中有至少一个会被结果匹配。<br><code>OR</code>运算符是默认的运算符，以空格隔开的“表达式“默认之间是“或者”的关系，可以用<code>||</code>代替之。</p>
+<h3 id="AND">AND</h3><blockquote>
+<p>The AND operator matches documents where both terms exist anywhere in the text of a single document. </p>
+</blockquote>
+<p>AND运算符连接的条件都必须被结果匹配。<br><code>AND</code>可以被<code>&amp;&amp;</code>代替</p>
+<h3 id="NOT">NOT</h3><blockquote>
+<p>The NOT operator excludes documents that contain the term after NOT. </p>
+</blockquote>
+<p>含有NOT后面的条件的结果不会被搜索到。<br>注意，NOT是双目运算符，意义应该是“含有前者但不包含后者的意思”，例如<code>&quot;jakarta apache&quot; NOT &quot;Apache Lucene&quot;</code>表示含有jakarta apache而不包括Apache Lucene，可以被写为<code>!</code></p>
+<h3 id="+">+</h3><blockquote>
+<p>The “+” or required operator requires that the term after the “+” symbol exist somewhere in a the field of a single document.</p>
+</blockquote>
+<p>结果中的任意字段包含+后面的条件。</p>
+<h3 id="-">-</h3><blockquote>
+<p>The “-“ or prohibit operator excludes documents that contain the term after the “-“ symbol.</p>
+</blockquote>
+<p>结果中的任意字段都不包含+后面的条件。<br>减号的作用与NOT相同。</p>
+<h2 id="Grouping_and_Field_Grouping_（分组）">Grouping and Field Grouping （分组）</h2><p>不同条件可以用小括号分组，例如<code>(jakarta OR apache) AND website</code><br>同一个字段的不同条件可以在字段后加小括号，例如<code>title:(+return +&quot;pink panther&quot;)</code></p>
+<h2 id="Escaping_Special_Characters（特殊字符转义）">Escaping Special Characters（特殊字符转义）</h2><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+ - &amp;&amp; <span class="string">|| ! ( ) &#123; &#125; [ ] ^ "</span> ~ * ? : \ /</span><br></pre></td></tr></table></figure>
+<p>遇到这些字符时，可以用<code>\</code>来转义，例如<code>\(1\+1\)\:2</code></p>
+<h1 id="Solr与Lucene的不同">Solr与Lucene的不同</h1><ul>
+<li><blockquote>
+<p>Range queries [a TO z], prefix queries a<em>, and wildcard queries a</em>b are constant-scoring (all matching documents get an equal score). The scoring factors tf, idf, index boost, and coord are not used. There is no limitation on the number of terms that match (as there was in past versions of Lucene).</p>
+</blockquote>
+</li>
+</ul>
+<p>范围搜索、通配符如<code>a*</code>、<code>a*b</code>的搜索，结果的score是一样的，tf idf index boost coord不用。</p>
+<ul>
+<li><blockquote>
+<p>A * may be used for either or both endpoints to specify an open-ended range query.</p>
+</blockquote>
+</li>
+</ul>
+<p>范围搜索两端都可以用星号。</p>
+<ul>
+<li><blockquote>
+<p>Pure negative queries (all clauses prohibited) are allowed.</p>
+</blockquote>
+</li>
+</ul>
+<p>减号/not 可以单独使用。</p>
+<ul>
+<li><blockquote>
+<p>A hook into FunctionQuery syntax. Quotes will be necessary to encapsulate the function when it includes parentheses.<br>Example: <em>val</em>:”recip(rord(myfield),1,2,3)”<br>Nested query support for any type of query parser (via QParserPlugin). Quotes will often be necessary to encapsulate the nested query if it contains reserved characters.<br>Example: <em>query</em>:”{!dismax qf=myfield}how now brown cow”</p>
+</blockquote>
+</li>
+<li><p>如果使用DateField类型，必须严格遵照yyyy-MM-ddTHH-mm-ss.sssZ</p>
+</li>
+</ul>
+<h1 id="查询字段含义">查询字段含义</h1><ul>
+<li><code>q</code> 查询语句，唯一，必填</li>
+<li><code>fq</code> 过滤查询，可以有多个，非必须</li>
+<li><code>sort</code> 排序字段，如name desc，注意<code>score</code>是个关键词，指的是搜索结果的匹配度评分，schame里面的字段名不要叫score，否则无法排序</li>
+<li><code>start,rows</code> 分页字段，start是从结果的第几条开始，rows是一共返回多少条，注意start从0开始，类似于c语言风格的数组下标</li>
+<li><code>fl</code> 逗号分隔的字段名字符串，规定本次搜索返回的结果中包含什么字段</li>
+<li><code>df</code> 规定默认查询字段</li>
+<li><code>wt</code> 规定返回格式，xml, json, php, phps</li>
+<li>lbs、facet搜索时候用的一些特殊字段后文再讲</li>
+</ul>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[Solr学习第03章：快速上手-客户端]]></title>
-      <url>http://kkop233.github.io/solr/cigbsllug000ar4nwkhnb6tvw.html</url>
+      <url>http://kkop233.github.io/solr/ciglxh0wx000excnwtsuabzli.html</url>
       <content type="html"><![CDATA[<h1 id="SolrJ使用">SolrJ使用</h1><p>上一章我们配置了索引，导入了数据，并且实现了再solr的管理页面搜索数据。但是我们现在面临一个问题，虽然可以用http的方式与solr交互了，但非常的不方便。请求必须自己拼凑字符串，response也必须自己手动处理长长的json字符串，成功失败的状态也必须自己解析等等。<br>好在Solr的开发者已经帮助我们开发好了各种语言使用的客户端，这个客户端可以类比为连接MySQL的JDBC。<br>我们先建立个简单的Java项目，拷贝<code>solr-5.3.1\dist</code>目录下的<code>solr-solrj-5.3.1.jar</code>，以及<code>solr-5.3.1\dist\solrj-lib</code>下的所有jar引入工程，可能还缺少一个commons-logging.jar，百度下载即可。<br>jar包导入后编写代码：<br>Student.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> solrj;</span><br><span class="line"><span class="comment">//省略import</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> Date birthday;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> avg_score;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; hobby;</span><br><span class="line">    <span class="annotation">@Field</span></span><br><span class="line">    <span class="keyword">private</span> String motto;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(<span class="keyword">int</span> id, String name, Date birthday, <span class="keyword">double</span> avg_score,</span><br><span class="line">            List&lt;String&gt; hobby)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.birthday = birthday;</span><br><span class="line">        <span class="keyword">this</span>.avg_score = avg_score;</span><br><span class="line">        <span class="keyword">this</span>.hobby = hobby;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Student [id="</span> + id + <span class="string">", name="</span> + name + <span class="string">", birthday="</span></span><br><span class="line">                + birthday + <span class="string">", avg_score="</span> + avg_score + <span class="string">", hobby="</span> + hobby</span><br><span class="line">                + <span class="string">", motto="</span> + motto + <span class="string">"]"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">      <span class="comment">// 省略get set方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>注意Student中的field必须用@Field注解<br>Main.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> solrj;</span><br><span class="line"><span class="comment">//省略import</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> String url=<span class="string">"http://host:port/solr/student"</span>;   <span class="comment">//注意改成你的地址</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span> <span class="keyword">throws</span> SolrServerException, IOException </span>&#123;</span><br><span class="line">        List&lt;String&gt; list=<span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">        list.add(<span class="string">"暴走"</span>);</span><br><span class="line">        list.add(<span class="string">"漫画"</span>);</span><br><span class="line">        list.add(<span class="string">"篮球"</span>);</span><br><span class="line">        SolrInputDocument doc=<span class="keyword">new</span> SolrInputDocument();</span><br><span class="line">        doc.setField(<span class="string">"id"</span>, <span class="number">666</span>);</span><br><span class="line">        doc.setField(<span class="string">"name"</span>, <span class="string">"王尼玛"</span>);</span><br><span class="line">        doc.setField(<span class="string">"birthday"</span>, <span class="keyword">new</span> Date());</span><br><span class="line">        doc.setField(<span class="string">"avg_score"</span>, <span class="number">9.9</span>);</span><br><span class="line">        doc.setField(<span class="string">"hobby"</span>, list); <span class="comment">// list可以是继承Collection的对象</span></span><br><span class="line">        doc.setField(<span class="string">"motto"</span>, <span class="string">"fxxk my life"</span>);</span><br><span class="line">        </span><br><span class="line">        SolrClient server = <span class="keyword">new</span>    HttpSolrClient(url);</span><br><span class="line">        UpdateResponse response=server.add(doc);</span><br><span class="line">        server.commit();</span><br><span class="line">        server.close();</span><br><span class="line">        System.out.println(response.toString());</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">search</span><span class="params">()</span> <span class="keyword">throws</span> SolrServerException, IOException </span>&#123;</span><br><span class="line">        SolrClient server = <span class="keyword">new</span>    HttpSolrClient(url);</span><br><span class="line">        SolrQuery query=<span class="keyword">new</span> SolrQuery();</span><br><span class="line">        query.set(<span class="string">"q"</span>, <span class="string">"hobby:篮球 AND id:[2 TO *]"</span>);</span><br><span class="line">        QueryResponse response=server.query(query);</span><br><span class="line">        List&lt;Student&gt; list=response.getBeans(Student.class);</span><br><span class="line">        server.close();</span><br><span class="line">        <span class="keyword">for</span> (Student student : list) &#123;</span><br><span class="line">            System.out.println(student.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> SolrServerException, IOException </span>&#123;</span><br><span class="line">        add();</span><br><span class="line">        search();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>注意事项：</p>
@@ -20,7 +111,7 @@
     
     <entry>
       <title><![CDATA[Solr学习第02章：快速上手-创建索引]]></title>
-      <url>http://kkop233.github.io/solr/cigbslluw000er4nwpfk42qfa.html</url>
+      <url>http://kkop233.github.io/solr/ciglxh0wz000ixcnwh1qyc19i.html</url>
       <content type="html"><![CDATA[<p>快速上手旨在最快速的建立一个可用的Demo工程，对solr的整个使用过程做一个概况的了解，忽略详细难以理解的超多配置，对进一步的学习起到构建大致框架的作用。</p>
 <h1 id="一、Core的建立">一、Core的建立</h1><p>在Solr中，一个core就可以简单的类比为关系数据库中的表，一个core可以对应web开发中的java bean，例如，我们可以建立一个“学生”core：</p>
 <h2 id="1-_手动建立core目录和配置文件">1. 手动建立core目录和配置文件</h2><p>打开{solrhome}，以<code>student</code> core 为例</p>
@@ -49,7 +140,7 @@
     
     <entry>
       <title><![CDATA[Solr学习第01章：安装与配置]]></title>
-      <url>http://kkop233.github.io/solr/cigbsllrf0000r4nwj52rg7ug.html</url>
+      <url>http://kkop233.github.io/solr/ciglxh0sx0000xcnw9oysw9r5.html</url>
       <content type="html"><![CDATA[<h1 id="一、Solr简介">一、Solr简介</h1><p>Apache Solr官网</p>
 <blockquote>
 <p>Solr is highly reliable, scalable and fault tolerant, providing distributed indexing,<br>replication and load-balanced querying, automated failover and recovery, centralized configuration and more.<br>Solr powers the search and navigation features of many of the world’s largest internet sites. –Apache Solr官网<br>百度百科<br>Solr是一个高性能，采用Java5开发，基于Lucene的全文搜索服务器。同时对其进行了扩展，提供了比Lucene更为丰富的查询语言，<br>同时实现了可配置、可扩展并对查询性能进行了优化，并且提供了一个完善的功能管理界面，是一款非常优秀的全文搜索引擎。–百度百科</p>
